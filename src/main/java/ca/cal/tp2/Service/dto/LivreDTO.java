@@ -1,9 +1,19 @@
 package ca.cal.tp2.Service.dto;
 
-import ca.cal.tp2.Modele.Livre;
+import lombok.Getter;
+import lombok.ToString;
 
-public record LivreDTO(Long id, String titre, int anneePublication, int nombreExemplaires, String auteur, String editeur, int nbPages) {
-    public static LivreDTO toDto(Livre livre) {
-        return new LivreDTO(livre.getId(), livre.getTitre(), livre.getAnneePublication(), livre.getNombreExemplaires(), livre.getAuteur(), livre.getEditeur(), livre.getNbPages());
+@Getter
+@ToString(callSuper = true)
+public class LivreDTO extends DocumentDTO {
+    private String auteur;
+    private String editeur;
+    private int nbPages;
+
+    public LivreDTO(Long id, String titre, int anneePublication, int nombreExemplaires, String auteur, String editeur, int nbPages) {
+        super(id, titre, anneePublication, nombreExemplaires);
+        this.auteur = auteur;
+        this.editeur = editeur;
+        this.nbPages = nbPages;
     }
 }

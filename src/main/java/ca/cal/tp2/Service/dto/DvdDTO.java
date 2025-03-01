@@ -1,9 +1,17 @@
 package ca.cal.tp2.Service.dto;
 
-import ca.cal.tp2.Modele.Dvd;
+import lombok.Getter;
+import lombok.ToString;
 
-public record DvdDTO(Long id, String titre, int anneePublication, int nombreExemplaires, String realisateur, int nbMinutes) {
-    public static DvdDTO toDto(Dvd dvd) {
-        return new DvdDTO(dvd.getId(), dvd.getTitre(), dvd.getAnneePublication(), dvd.getNombreExemplaires(), dvd.getRealisateur(), dvd.getNbMinutes());
+@Getter
+@ToString(callSuper = true)
+public class DvdDTO extends DocumentDTO {
+    private String realisateur;
+    private int nbMinutes;
+
+    public DvdDTO(Long id, String titre, int anneePublication, int nombreExemplaires, String realisateur, int nbMinutes) {
+        super(id, titre, anneePublication, nombreExemplaires);
+        this.realisateur = realisateur;
+        this.nbMinutes = nbMinutes;
     }
 }
