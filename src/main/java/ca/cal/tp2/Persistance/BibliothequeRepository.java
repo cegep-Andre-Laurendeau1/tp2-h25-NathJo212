@@ -1,12 +1,12 @@
-package ca.cal.tp2.Persistence;
+package ca.cal.tp2.Persistance;
 
 import ca.cal.tp2.Modele.Livre;
 
 import java.sql.*;
 
-public class BibliothequeRepository extends RepositoryParentJDBC {
+public class BibliothequeRepository extends RepositoryParentJDBC implements PersistanceGenerique <Livre> {
 
-    public static void ajouterLivre(Livre livre) {
+    public void save(Livre livre) {
         String requete = """
                 insert into Livre values (?, ?, ?, ?, ?, ?, ?);
                 """;
@@ -36,7 +36,7 @@ public class BibliothequeRepository extends RepositoryParentJDBC {
         }
     }
 
-    public Livre getLivreParId(long id) {
+    public Livre getById(Long id) {
         String requete = "SELECT * FROM Livre WHERE id = ?";
         try (PreparedStatement preparedStatement = conn.prepareStatement(requete)) {
             preparedStatement.setLong(1, id);

@@ -1,4 +1,4 @@
-package ca.cal.tp2.Persistence;
+package ca.cal.tp2.Persistance;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
