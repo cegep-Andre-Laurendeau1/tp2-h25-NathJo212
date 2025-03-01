@@ -5,8 +5,8 @@
     <groupId>ca.cal</groupId>
     <artifactId>tp1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>tp1</name>
-    <description>tp1</description>
+    <name>tp2</name>
+    <description>tp2</description>
     <properties>
         <java.version>23</java.version>
     </properties>
@@ -33,8 +33,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>15</source>
-                    <target>15</target>
+                    <source>23</source>
+                    <target>23</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
