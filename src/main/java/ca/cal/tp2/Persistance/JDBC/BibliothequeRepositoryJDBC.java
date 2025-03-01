@@ -1,10 +1,11 @@
-package ca.cal.tp2.Persistance;
+package ca.cal.tp2.Persistance.JDBC;
 
 import ca.cal.tp2.Modele.Livre;
+import ca.cal.tp2.Persistance.PersistanceGenerique;
 
 import java.sql.*;
 
-public class BibliothequeRepository extends RepositoryParentJDBC implements PersistanceGenerique <Livre> {
+public class BibliothequeRepositoryJDBC extends RepositoryParentJDBC implements PersistanceGenerique<Livre> {
 
     public void save(Livre livre) {
         String requete = """

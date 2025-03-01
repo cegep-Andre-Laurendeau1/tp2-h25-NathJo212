@@ -1,7 +1,9 @@
 package ca.cal.tp2.Service;
 
 import ca.cal.tp2.Modele.*;
-import ca.cal.tp2.Persistence.BibliothequeRepository;
+import ca.cal.tp2.Persistance.JDBC.BibliothequeRepositoryJDBC;
+import ca.cal.tp2.Persistance.PersistanceGenerique;
+import ca.cal.tp2.Service.dto.LivreDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,22 +12,12 @@ import java.util.Map;
 
 public class BibliothequeService {
 
-    private final BibliothequeRepository bibliothequeRepository;
-    private final Map<Long, Document> documents;
+    private final PersistanceGenerique persistanceGenerique;
     private final Map<Long, Emprunteur> emprunteurs;
 
-    public BibliothequeService(BibliothequeRepository bibliothequeRepository) {
-        this.bibliothequeRepository = bibliothequeRepository;
-        this.documents = new HashMap<>();
+    public BibliothequeService(PersistanceGenerique persistanceGenerique) {
+        this.persistanceGenerique = persistanceGenerique;
         this.emprunteurs = new HashMap<>();
-    }
-
-    public void ajouterDocument(Document document) {
-        documents.put(document.getId(), document);
-    }
-
-    public void supprimerDocument(long id) {
-        documents.remove(id);
     }
 
     public void ajouterEmprunteur(Emprunteur emprunteur){
@@ -33,12 +25,7 @@ public class BibliothequeService {
     }
 
     public Document getDocumentParId(long documentId) {
-        Document document = documents.get(documentId);
-        if (document == null) {
-            document = bibliothequeRepository.getLivreParId(documentId);
-            return document;
-        }
-        return document;
+        return (Document) persistanceGenerique.getById(documentId);
     }
 
     public Emprunteur getEmprunteurParId(long idEmprunteur) {
@@ -49,6 +36,7 @@ public class BibliothequeService {
         return new ArrayList<>(emprunteurs.values());
     }
 
+    /*
     public List<Document> rechercherDocuments(String titre, String auteur, String editeur, String type) {
         List<Document> resultats = new ArrayList<>();
         for (Document document : documents.values()) {
@@ -71,7 +59,7 @@ public class BibliothequeService {
         }
         afficherResultatsRecherche(resultats);
         return resultats;
-    }
+    }*/
 
     public void afficherResultatsRecherche(List<Document> documents) {
         for (Document document : documents) {
