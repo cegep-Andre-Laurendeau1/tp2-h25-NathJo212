@@ -3,6 +3,7 @@ package ca.cal.tp2.Service;
 import ca.cal.tp2.Modele.*;
 import ca.cal.tp2.Persistance.JDBC.BibliothequeRepositoryJDBC;
 import ca.cal.tp2.Persistance.PersistanceGenerique;
+import ca.cal.tp2.Service.dto.DocumentDTO;
 import ca.cal.tp2.Service.dto.LivreDTO;
 
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ public class BibliothequeService {
 
     public Document getDocumentParId(long documentId) {
         return (Document) persistanceGenerique.getById(documentId);
+    }
+
+    public DocumentDTO rechercherDocumentParId(long documentId) {
+        return DocumentDTO.toDto((Document) persistanceGenerique.getById(documentId));
     }
 
     public Emprunteur getEmprunteurParId(long idEmprunteur) {

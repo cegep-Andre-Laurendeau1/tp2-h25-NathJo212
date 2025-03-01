@@ -1,41 +1,30 @@
 package ca.cal.tp2.Service;
 
 import ca.cal.tp2.Modele.*;
-import ca.cal.tp2.Persistence.BibliothequeRepository;
+import ca.cal.tp2.Persistance.JDBC.BibliothequeRepositoryJDBC;
+import ca.cal.tp2.Persistance.PersistanceGenerique;
 
 import java.util.List;
 
 public class PreposeService {
-    private final BibliothequeRepository bibliothequeRepository;
+    private final PersistanceGenerique persistanceGenerique;
     private final BibliothequeService bibliothequeService;
 
-    public PreposeService(BibliothequeService bibliothequeService, BibliothequeRepository bibliothequeRepository) {
+    public PreposeService(BibliothequeService bibliothequeService, PersistanceGenerique persistanceGenerique) {
         this.bibliothequeService = bibliothequeService;
-        this.bibliothequeRepository = bibliothequeRepository;
+        this.persistanceGenerique = persistanceGenerique;
     }
 
-    public void ajouterLivre(long id, String titre, int anneePublication, int nbExemplaires, String auteur, String editeur, int nbPages) {
-        bibliothequeRepository.ajouterLivre(new Livre(id, titre, anneePublication, nbExemplaires, auteur, editeur, nbPages));
+    public void ajouterLivre(String titre, int anneePublication, int nbExemplaires, String auteur, String editeur, int nbPages) {
+        persistanceGenerique.save(new Livre(0, titre, anneePublication, nbExemplaires, auteur, editeur, nbPages));
     }
 
-    public void ajouterCd(long id, String titre, int anneePublication, int nbExemplaires, String artiste, int nbMinutes) {
-        bibliothequeService.ajouterDocument(new Cd(id, titre, anneePublication, nbExemplaires, artiste, nbMinutes));
+    public void ajouterCd(String titre, int anneePublication, int nbExemplaires, String artiste, int nbMinutes) {
+        persistanceGenerique.save(new Cd(0, titre, anneePublication, nbExemplaires, artiste, nbMinutes));
     }
 
-    public void ajouterDvd(long id, String titre, int anneePublication, int nbExemplaires, String realisateur, int nbMinutes) {
-        bibliothequeService.ajouterDocument(new Dvd(id, titre, anneePublication, nbExemplaires, realisateur, nbMinutes));
-    }
-
-    public void retirerLivre(long id) {
-        bibliothequeRepository.supprimerLivre(id);
-    }
-
-    public void retirerCd(long id) {
-        bibliothequeService.supprimerDocument(id);
-    }
-
-    public void retirerDvd(long id) {
-        bibliothequeService.supprimerDocument(id);
+    public void ajouterDvd(String titre, int anneePublication, int nbExemplaires, String realisateur, int nbMinutes) {
+        persistanceGenerique.save(new Dvd(0, titre, anneePublication, nbExemplaires, realisateur, nbMinutes));
     }
 
     public void ajouterEmprunteur(long id, String nom, String prenom) {

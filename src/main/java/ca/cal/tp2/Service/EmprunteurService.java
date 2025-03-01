@@ -2,6 +2,7 @@ package ca.cal.tp2.Service;
 
 import ca.cal.tp2.Modele.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class EmprunteurService {
@@ -16,7 +17,7 @@ public class EmprunteurService {
 
     public void emprunterDocuments(long emprunteurId, List<Long> documentIds, int annee, int mois, int jour) {
         Emprunteur emprunteur = bibliothequeService.getEmprunteurParId(emprunteurId);
-        Date dateEmprunt = new Date(annee - 1900, mois - 1, jour);
+        LocalDate dateEmprunt = LocalDate.of(annee, mois, jour);
 
         if (emprunteur == null) {
             throw new RuntimeException("Emprunteur non trouvé");
@@ -40,7 +41,7 @@ public class EmprunteurService {
                 throw new RuntimeException("Plus d'exemplaire empruntable pour le document, id: " + document.getId() + ", titre: " + document.getTitre());
             }
 
-            Date dateRetourPrevue = calculerDateRetour(document, dateEmprunt);
+            LocalDate dateRetourPrevue = calculerDateRetour(document, dateEmprunt);
             EmpruntDetail empruntDetail = new EmpruntDetail(documentId, dateRetourPrevue);
             emprunt.ajouterEmpruntDetail(empruntDetail);
         }
@@ -50,7 +51,7 @@ public class EmprunteurService {
 
     public void retournerDocument(long emprunteurId, long documentId, int annee, int mois, int jour) {
         Emprunteur emprunteur = bibliothequeService.getEmprunteurParId(emprunteurId);
-        Date dateRetour = new Date(annee - 1900, mois - 1, jour);
+        LocalDate dateRetour = LocalDate.of(annee, mois, jour);
 
         if (emprunteur == null) {
             throw new RuntimeException("Emprunteur non trouvé");
@@ -62,12 +63,11 @@ public class EmprunteurService {
                     empruntDetail.setDateRetourActuelle(dateRetour);
 
                     // Calculer l'amende si le document est retourné en retard
-                    if (dateRetour.after(empruntDetail.getDateRetourPrevue())) {
-                        long differenceEnMillisecondes = Math.abs(dateRetour.getTime() - empruntDetail.getDateRetourPrevue().getTime());
-                        long differenceEnJours = differenceEnMillisecondes / (1000 * 60 * 60 * 24);
+                    if (dateRetour.isAfter(empruntDetail.getDateRetourPrevue())) {
+                        long differenceEnJours = java.time.temporal.ChronoUnit.DAYS.between(empruntDetail.getDateRetourPrevue(), dateRetour);
                         double montantAmende = differenceEnJours * 0.25;
 
-                        Amendes amende = new Amendes(System.currentTimeMillis(), montantAmende, new Date());
+                        Amendes amende = new Amendes(System.currentTimeMillis(), montantAmende, dateRetour);
                         emprunteur.getAmendes().add(amende);
                         empruntDetail.setStatus("retourné en retard");
                     } else {
@@ -88,7 +88,7 @@ public class EmprunteurService {
         }
 
         double montantRestant = montant;
-        Date datePaiement = new Date(annee - 1900, mois - 1, jour);
+        LocalDate datePaiement = LocalDate.of(annee, mois, jour);
 
         for (Amendes amende : emprunteur.getAmendes()) {
             if (!amende.isPaye() && montantRestant > 0) {
@@ -107,19 +107,18 @@ public class EmprunteurService {
         }
     }
 
-    private Date calculerDateRetour(Document document, Date dateEmprunt) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateEmprunt);
+    private LocalDate calculerDateRetour(Document document, LocalDate dateEmprunt) {
+        LocalDate dateRetourPrevue = dateEmprunt;
 
         if (document instanceof Livre) {
-            calendar.add(Calendar.WEEK_OF_YEAR, 3);
+            dateRetourPrevue = dateEmprunt.plusWeeks(3);
         } else if (document instanceof Cd) {
-            calendar.add(Calendar.WEEK_OF_YEAR, 2);
+            dateRetourPrevue = dateEmprunt.plusWeeks(2);
         } else if (document instanceof Dvd) {
-            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+            dateRetourPrevue = dateEmprunt.plusWeeks(1);
         }
 
-        return calendar.getTime();
+        return dateRetourPrevue;
     }
 
     public void afficherEmprunts(long emprunteurId) {
