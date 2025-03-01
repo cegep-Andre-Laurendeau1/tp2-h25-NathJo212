@@ -1,11 +1,19 @@
 package ca.cal.tp2.Modele;
 
-import lombok.Data;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Entity
+@Table(name = "cd")
+@NoArgsConstructor
+@Getter
+@DiscriminatorValue("C")
 public class Cd extends Document {
-    private final String artiste;
-    private final int nbMinutes;
+    private String artiste;
+    private int nbMinutes;
     private final int dureeEmprunt = 2;
 
     public Cd(long id, String titre, int anneePublication, int nombreExemplaires, String artiste, int nbMinutes) {

@@ -1,12 +1,22 @@
 package ca.cal.tp2.Modele;
 
-import lombok.Data;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-public class Livre extends Document{
-    private final String auteur;
-    private final String editeur;
-    private final int nbPages;
+@Entity
+@Table(name = "livre")
+@NoArgsConstructor
+@Getter
+@DiscriminatorValue("L")
+public class Livre extends Document {
+
+    private String auteur;
+    private String editeur;
+    private int nbPages;
     private final int dureeEmprunt = 3;
 
     public Livre(long id, String titre, int anneePublication, int nombreExemplaires, String auteur, String editeur, int nbPages) {

@@ -1,11 +1,19 @@
 package ca.cal.tp2.Modele;
 
-import lombok.Data;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-public class Dvd extends Document{
-    private final String realisateur;
-    private final int nbMinutes;
+@Entity
+@Table(name = "dvd")
+@NoArgsConstructor
+@Getter
+@DiscriminatorValue("D")
+public class Dvd extends Document {
+    private String realisateur;
+    private int nbMinutes;
     private final int dureeEmprunt = 1;
 
     public Dvd(long id, String titre, int anneePublication, int nombreExemplaires, String realisateur, int nbMinutes) {

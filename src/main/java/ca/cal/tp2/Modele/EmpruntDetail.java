@@ -1,26 +1,37 @@
 package ca.cal.tp2.Modele;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-@Data
+@Entity
+@Table(name = "emprunt_detail")
+@NoArgsConstructor
+@Getter
 public class EmpruntDetail {
-    private final long lineItemID;
-    private final Date dateRetourPrevue;
-    private Date dateRetourActuelle;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long lineItemID;
+    private LocalDate dateRetourPrevue;
+    @Setter
+    private LocalDate dateRetourActuelle;
+    @Setter
     private String status;
 
-    public EmpruntDetail(long lineItemID, Date dateRetourPrevue) {
+    @ManyToOne
+    @JoinColumn(name = "emprunt_id")
+    private Emprunt emprunt;
+
+    @ManyToOne
+    @JoinColumn(name = "document_id")
+    private Document document;
+
+    public EmpruntDetail(long lineItemID, LocalDate dateRetourPrevue) {
         this.lineItemID = lineItemID;
         this.dateRetourPrevue = dateRetourPrevue;
         this.status = "en cours";
-    }
-
-    public boolean isEnRetard() {
-        if (dateRetourActuelle != null) {
-            return dateRetourActuelle.after(dateRetourPrevue);
-        }
-        return false;
     }
 }

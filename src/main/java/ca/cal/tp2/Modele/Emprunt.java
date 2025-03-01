@@ -1,21 +1,33 @@
 package ca.cal.tp2.Modele;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-@Data
+@Entity
+@Table(name = "emprunt")
+@NoArgsConstructor
+@Getter
 public class Emprunt {
-    private final long id;
-    private final Date emprunt;
-    private final List<EmpruntDetail> empruntDetails;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private LocalDate emprunt;
 
-    public Emprunt(long id, Date emprunt) {
+    @ManyToOne
+    @JoinColumn(name = "emprunteur_id")
+    private Emprunteur emprunteur;
+
+    @OneToMany(mappedBy = "emprunt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmpruntDetail> empruntDetails = new ArrayList<>();
+
+    public Emprunt(long id, LocalDate emprunt) {
         this.id = id;
         this.emprunt = emprunt;
-        this.empruntDetails = new ArrayList<>();
     }
 
     public void ajouterEmpruntDetail(EmpruntDetail empruntDetail) {
