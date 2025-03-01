@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorColumn(name = "discriminator")
 public abstract class Document {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String titre;
     private int anneePublication;

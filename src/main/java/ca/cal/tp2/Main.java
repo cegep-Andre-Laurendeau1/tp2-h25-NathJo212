@@ -21,6 +21,18 @@ public class Main {
         preposeService.ajouterLivre("L'Aiguille creuse", 1909, 5, "Maurice Leblanc", "Éditions Pierre Lafitte", 345);
 
         // Rechercher un document par titre
-        System.out.println(bibliothequeService.getDocumentParId(1));
+        System.out.println(bibliothequeService.rechercherDocumentParId(1));
+
+        // Ajouter un CD à la bibliothèque
+        preposeService.ajouterCd("Weezer", 1994, 10, "Weezer", 12);
+
+        // Rechercher un CD par ID
+        System.out.println(bibliothequeService.rechercherDocumentParId(2));
+
+        // Ajouter un DVD à la bibliothèque
+        preposeService.ajouterDvd("Inception", 2010, 7, "Christopher Nolan", 148);
+
+        // Rechercher un DVD par ID
+        System.out.println(bibliothequeService.rechercherDocumentParId(3));
     }
 }
