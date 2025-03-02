@@ -23,14 +23,18 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
     @Override
     public Emprunteur getByEmail(String email) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            TypedQuery<Emprunteur> query = entityManager.createQuery(
-                    "SELECT e FROM Emprunteur e WHERE e.email = :email", Emprunteur.class);
+            TypedQuery<Emprunteur> query = entityManager.createQuery("SELECT e FROM Emprunteur e WHERE e.email = :email", Emprunteur.class);
             query.setParameter("email", email);
-            return query.getSingleResult();
+            Emprunteur emprunteur = query.getSingleResult();
+
+            emprunteur.getAmendes().size();
+            emprunteur.getEmprunts().forEach(emprunt -> emprunt.getEmpruntDetails().size());
+
+            return emprunteur;
         } catch (NoResultException e) {
             return null;
         } catch (RuntimeException e) {
-            throw new RuntimeException("Erreur lors de la récupération de l'Emprunteur par prénom et nom : " + e.getMessage(), e);
+            throw new RuntimeException("Erreur lors de la récupération de l'Emprunteur par email: " + e.getMessage(), e);
         }
     }
 
@@ -38,7 +42,12 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
     public List<Emprunteur> getAll() {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             TypedQuery<Emprunteur> query = entityManager.createQuery("SELECT e FROM Emprunteur e", Emprunteur.class);
-            return query.getResultList();
+            List<Emprunteur> emprunteurs = query.getResultList();
+            for (Emprunteur emprunteur : emprunteurs) {
+                emprunteur.getAmendes().size();
+                emprunteur.getEmprunts().forEach(emprunt -> emprunt.getEmpruntDetails().size());
+            }
+            return emprunteurs;
         } catch (RuntimeException e) {
             throw new RuntimeException("Erreur lors de la récupération de tous les Emprunteurs : " + e.getMessage(), e);
         }

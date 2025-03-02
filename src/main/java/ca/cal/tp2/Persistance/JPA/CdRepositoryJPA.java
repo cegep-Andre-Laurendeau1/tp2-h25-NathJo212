@@ -28,7 +28,7 @@ public class CdRepositoryJPA implements DocumentRepository<Cd> {
             query += " AND c.titre LIKE :titre";
         }
         if (auteur != null && !auteur.isEmpty()) {
-            query += " AND c.auteur = :auteur";
+            query += " AND c.artiste = :artiste";
         }
         if (annee != null) {
             query += " AND c.anneePublication = :annee";
@@ -40,7 +40,7 @@ public class CdRepositoryJPA implements DocumentRepository<Cd> {
                 typedQuery.setParameter("titre", "%" + titre + "%");
             }
             if (auteur != null && !auteur.isEmpty()) {
-                typedQuery.setParameter("auteur", auteur);
+                typedQuery.setParameter("artiste", auteur);
             }
             if (annee != null) {
                 typedQuery.setParameter("annee", annee);

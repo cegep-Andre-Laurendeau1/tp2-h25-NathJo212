@@ -30,7 +30,7 @@ public class DvdRepositoryJPA implements DocumentRepository<Dvd> {
             query += " AND d.titre LIKE :titre";
         }
         if (auteur != null && !auteur.isEmpty()) {
-            query += " AND d.auteur = :auteur";
+            query += " AND d.realisateur = :realisateur";
         }
         if (annee != null) {
             query += " AND d.anneePublication = :annee";
@@ -42,7 +42,7 @@ public class DvdRepositoryJPA implements DocumentRepository<Dvd> {
                 typedQuery.setParameter("titre", "%" + titre + "%");
             }
             if (auteur != null && !auteur.isEmpty()) {
-                typedQuery.setParameter("auteur", auteur);
+                typedQuery.setParameter("realisateur", auteur);
             }
             if (annee != null) {
                 typedQuery.setParameter("annee", annee);

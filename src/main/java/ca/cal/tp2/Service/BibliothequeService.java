@@ -61,26 +61,27 @@ public class BibliothequeService {
             throw new RuntimeException("Document non trouvé: " + titre);
         }
 
-        Document document = documents.get(0); // Assuming titles are unique
-        long documentId = document.getId();
+        for (Document document : documents) {
+            long documentId = document.getId();
 
-        for (Emprunteur emprunteur : emprunteurs) {
-            for (Emprunt emprunt : emprunteur.getEmprunts()) {
-                for (EmpruntDetail empruntDetail : emprunt.getEmpruntDetails()) {
-                    if (empruntDetail.getDocument().getId() == documentId) {
-                        if (empruntDetail.getDateRetourActuelle() == null) {
-                            borrowedCount++;
+            for (Emprunteur emprunteur : emprunteurs) {
+                for (Emprunt emprunt : emprunteur.getEmprunts()) {
+                    for (EmpruntDetail empruntDetail : emprunt.getEmpruntDetails()) {
+                        if (empruntDetail.getDocument().getId() == documentId) {
+                            if (empruntDetail.getDateRetourActuelle() == null) {
+                                borrowedCount++;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        int availableCount = document.getNombreExemplaires() - borrowedCount;
-        if (availableCount < 0) {
-            throw new RuntimeException("Quantité incorrecte pour le document: " + document.getTitre());
+            int availableCount = document.getNombreExemplaires() - borrowedCount;
+            if (availableCount < 0) {
+                throw new RuntimeException("Quantité incorrecte pour le document: " + document.getTitre());
+            }
+            return availableCount;
         }
-
-        return availableCount;
+        return 0;
     }
 }
