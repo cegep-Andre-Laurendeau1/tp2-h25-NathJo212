@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @DiscriminatorValue("P")
 public class Prepose extends Utilisateur {
-    public Prepose(long id, String prenom, String nom) {
-        super(id, nom, prenom);
+    public Prepose(long id, String prenom, String nom, String email) {
+        super(id, nom, prenom, email);
     }
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"titre"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"titre", "anneePublication"}))
 @NoArgsConstructor
 @Getter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

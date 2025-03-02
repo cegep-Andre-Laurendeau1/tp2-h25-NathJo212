@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"nom", "prenom", "email"}))
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "discriminator")
 @NoArgsConstructor
@@ -16,10 +16,12 @@ public abstract class Utilisateur {
     private long id;
     private String nom;
     private String prenom;
+    private String email;
 
-    public Utilisateur(long id, String prenom, String nom) {
+    public Utilisateur(long id, String prenom, String nom, String email) {
         this.id = id;
         this.prenom = prenom;
         this.nom = nom;
+        this.email = email;
     }
 }
