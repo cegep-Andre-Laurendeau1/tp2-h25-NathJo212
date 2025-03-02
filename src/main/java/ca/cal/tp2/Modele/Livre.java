@@ -8,12 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "livre")
 @NoArgsConstructor
 @Getter
 @DiscriminatorValue("L")
 public class Livre extends Document {
-
     private String auteur;
     private String editeur;
     private int nbPages;

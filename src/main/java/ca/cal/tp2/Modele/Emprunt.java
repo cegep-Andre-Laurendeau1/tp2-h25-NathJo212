@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "emprunt")
+@Table
 @NoArgsConstructor
 @Getter
 public class Emprunt {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private LocalDate emprunt;
 
@@ -22,12 +22,13 @@ public class Emprunt {
     @JoinColumn(name = "emprunteur_id")
     private Emprunteur emprunteur;
 
-    @OneToMany(mappedBy = "emprunt", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "emprunt", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<EmpruntDetail> empruntDetails = new ArrayList<>();
 
-    public Emprunt(long id, LocalDate emprunt) {
+    public Emprunt(long id, LocalDate emprunt, Emprunteur emprunteur) {
         this.id = id;
         this.emprunt = emprunt;
+        this.emprunteur = emprunteur;
     }
 
     public void ajouterEmpruntDetail(EmpruntDetail empruntDetail) {

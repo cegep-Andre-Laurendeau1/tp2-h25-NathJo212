@@ -8,12 +8,12 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "emprunt_detail")
+@Table
 @NoArgsConstructor
 @Getter
 public class EmpruntDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long lineItemID;
     private LocalDate dateRetourPrevue;
     @Setter
@@ -29,9 +29,11 @@ public class EmpruntDetail {
     @JoinColumn(name = "document_id")
     private Document document;
 
-    public EmpruntDetail(long lineItemID, LocalDate dateRetourPrevue) {
+    public EmpruntDetail(long lineItemID, LocalDate dateRetourPrevue, Emprunt emprunt, Document document) {
         this.lineItemID = lineItemID;
         this.dateRetourPrevue = dateRetourPrevue;
         this.status = "en cours";
+        this.emprunt = emprunt;
+        this.document = document;
     }
 }

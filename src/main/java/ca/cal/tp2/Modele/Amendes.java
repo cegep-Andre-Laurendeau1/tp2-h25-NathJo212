@@ -8,12 +8,12 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "amendes")
+@Table
 @NoArgsConstructor
 @Getter
 public class Amendes {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private Double montant;
     private LocalDate dateEmis;
