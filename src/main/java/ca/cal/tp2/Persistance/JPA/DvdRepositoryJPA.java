@@ -1,13 +1,13 @@
 package ca.cal.tp2.Persistance.JPA;
 
 import ca.cal.tp2.Modele.Dvd;
-import ca.cal.tp2.Persistance.PersistanceGenerique;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
+import ca.cal.tp2.Modele.Livre;
+import ca.cal.tp2.Persistance.DocumentRepository;
+import jakarta.persistence.*;
 
-public class DvdRepositoryJPA implements PersistanceGenerique<Dvd> {
+import java.util.List;
+
+public class DvdRepositoryJPA implements DocumentRepository<Dvd> {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("nathan.pu");
 
     @Override
@@ -24,13 +24,30 @@ public class DvdRepositoryJPA implements PersistanceGenerique<Dvd> {
     }
 
     @Override
-    public Dvd getById(Long id) {
+    public List<Dvd> rechercheDocuments(String titre, String auteur, Integer annee) {
+        String query = "SELECT d FROM Dvd d WHERE 1=1";
+        if (titre != null && !titre.isEmpty()) {
+            query += " AND d.titre LIKE :titre";
+        }
+        if (auteur != null && !auteur.isEmpty()) {
+            query += " AND d.auteur = :auteur";
+        }
+        if (annee != null) {
+            query += " AND d.anneePublication = :annee";
+        }
+
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            TypedQuery<Dvd> query = entityManager.createQuery("SELECT d FROM Dvd d WHERE d.id = :id", Dvd.class);
-            query.setParameter("id", id);
-            return query.getSingleResult();
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Erreur lors de la récupération du Livre par ID : " + e.getMessage(), e);
+            TypedQuery<Dvd> typedQuery = entityManager.createQuery(query, Dvd.class);
+            if (titre != null && !titre.isEmpty()) {
+                typedQuery.setParameter("titre", "%" + titre + "%");
+            }
+            if (auteur != null && !auteur.isEmpty()) {
+                typedQuery.setParameter("auteur", auteur);
+            }
+            if (annee != null) {
+                typedQuery.setParameter("annee", annee);
+            }
+            return typedQuery.getResultList();
         }
     }
 }
