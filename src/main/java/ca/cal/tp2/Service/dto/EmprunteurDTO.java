@@ -6,7 +6,7 @@ import ca.cal.tp2.Modele.Emprunteur;
 import java.util.ArrayList;
 import java.util.List;
 
-public record EmprunteurDTO(Long id, String prenom, String nom, List<EmpruntDTO> emprunts, List<AmendesDTO> amendes) {
+public record EmprunteurDTO(Long id, String prenom, String nom, String email, List<EmpruntDTO> emprunts, List<AmendesDTO> amendes) {
     public static EmprunteurDTO toDto(Emprunteur emprunteur) {
         List<EmpruntDTO> empruntDTOs = new ArrayList<>();
         for (Emprunt emprunt : emprunteur.getEmprunts()) {
@@ -18,6 +18,6 @@ public record EmprunteurDTO(Long id, String prenom, String nom, List<EmpruntDTO>
             amendesDTOs.add(AmendesDTO.toDto(amendes));
         }
 
-        return new EmprunteurDTO(emprunteur.getId(), emprunteur.getPrenom(), emprunteur.getNom(), empruntDTOs, amendesDTOs);
+        return new EmprunteurDTO(emprunteur.getId(), emprunteur.getPrenom(), emprunteur.getNom(), emprunteur.getEmail(), empruntDTOs, amendesDTOs);
     }
 }
