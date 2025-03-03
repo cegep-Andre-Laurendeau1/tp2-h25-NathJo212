@@ -52,5 +52,8 @@ public class Main {
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println("Recherche de DVD qui n'as pas d'exemplaire:");
+        System.out.println(bibliothequeService.rechercherDocuments("Inception", null, null));
     }
 }

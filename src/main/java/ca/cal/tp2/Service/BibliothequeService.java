@@ -35,7 +35,15 @@ public class BibliothequeService {
         List<Document> documents = getDocuments(titre, auteur, annee);
         List<DocumentDTO> resultats = new ArrayList<>();
         for (Document document : documents) {
-            resultats.add(DocumentDTO.toDto(document));
+            int nombreExemplaireRestant;
+            if (document instanceof Livre) {
+                nombreExemplaireRestant = verifierQuantiteDocuments(document.getTitre(), ((Livre) document).getAuteur(), document.getAnneePublication());
+            } else if (document instanceof Cd){
+                nombreExemplaireRestant = verifierQuantiteDocuments(document.getTitre(), ((Cd) document).getArtiste(), document.getAnneePublication());
+            } else {
+                nombreExemplaireRestant = verifierQuantiteDocuments(document.getTitre(), ((Dvd) document).getRealisateur(), document.getAnneePublication());
+            }
+                resultats.add(DocumentDTO.toDto(document, nombreExemplaireRestant));
         }
         return resultats;
     }
