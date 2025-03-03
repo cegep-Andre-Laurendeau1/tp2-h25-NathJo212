@@ -14,10 +14,10 @@ import java.util.List;
 @ToString
 @DiscriminatorValue("E")
 public class Emprunteur extends Utilisateur {
-    @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.PERSIST)
     private List<Emprunt> emprunts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.PERSIST)
     private List<Amendes> amendes = new ArrayList<>();
 
     public Emprunteur(long id, String prenom, String nom, String email) {

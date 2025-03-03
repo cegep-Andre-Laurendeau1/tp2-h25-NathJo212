@@ -22,7 +22,7 @@ public class Emprunt {
     @JoinColumn(name = "emprunteur_id")
     private Emprunteur emprunteur;
 
-    @OneToMany(mappedBy = "emprunt", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "emprunt", cascade = CascadeType.PERSIST)
     private List<EmpruntDetail> empruntDetails = new ArrayList<>();
 
     public Emprunt(long id, LocalDate emprunt, Emprunteur emprunteur) {
