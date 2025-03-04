@@ -36,10 +36,10 @@ public class LivreRepositoryJPA implements DocumentRepository<Livre> {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             TypedQuery<Livre> typedQuery = entityManager.createQuery(query, Livre.class);
             if (titre != null && !titre.isEmpty()) {
-                typedQuery.setParameter("titre", "%" + titre + "%");
+                typedQuery.setParameter("titre", "%" + titre.toLowerCase() + "%");
             }
             if (auteur != null && !auteur.isEmpty()) {
-                typedQuery.setParameter("auteur", auteur);
+                typedQuery.setParameter("auteur", auteur.toLowerCase());
             }
             if (annee != null) {
                 typedQuery.setParameter("annee", annee);

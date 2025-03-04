@@ -23,15 +23,15 @@ public class PreposeService {
     }
 
     public void ajouterLivre(String titre, int anneePublication, int nbExemplaires, String auteur, String editeur, int nbPages) {
-        livreRepository.save(new Livre(0, titre, anneePublication, nbExemplaires, auteur, editeur, nbPages));
+        livreRepository.save(new Livre(0, titre.toLowerCase(), anneePublication, nbExemplaires, auteur.toLowerCase(), editeur.toLowerCase(), nbPages));
     }
 
     public void ajouterCd(String titre, int anneePublication, int nbExemplaires, String artiste, int nbMinutes) {
-        cdRepository.save(new Cd(0, titre, anneePublication, nbExemplaires, artiste, nbMinutes));
+        cdRepository.save(new Cd(0, titre.toLowerCase(), anneePublication, nbExemplaires, artiste.toLowerCase(), nbMinutes));
     }
 
     public void ajouterDvd(String titre, int anneePublication, int nbExemplaires, String realisateur, int nbMinutes) {
-        dvdRepository.save(new Dvd(0, titre, anneePublication, nbExemplaires, realisateur, nbMinutes));
+        dvdRepository.save(new Dvd(0, titre.toLowerCase(), anneePublication, nbExemplaires, realisateur.toLowerCase(), nbMinutes));
     }
 
     public void ajouterEmprunteur(String nom, String prenom, String email) {

@@ -31,11 +31,11 @@ public class Main {
         preposeService.ajouterCd("Weezer", 1994, 10, "Weezer", 12);
         preposeService.ajouterDvd("Inception", 2010, 1, "Christopher Nolan", 148);
 
-        // Recherche de livre par titre, auteur et année
+        // Recherche de livre par titre, auteur et année et aussi avec das majuscules ou sans majuscules
         System.out.println("Recherche de livres par titre:");
         System.out.println(bibliothequeService.rechercherDocuments("Aiguille", null, null));
         System.out.println("Recherche de livres par auteur:");
-        System.out.println(bibliothequeService.rechercherDocuments(null, "Maurice Leblanc", null));
+        System.out.println(bibliothequeService.rechercherDocuments(null, "maurice leblanc", null));
         System.out.println("Recherche de livres par année:");
         System.out.println(bibliothequeService.rechercherDocuments(null, null, 1909));
 

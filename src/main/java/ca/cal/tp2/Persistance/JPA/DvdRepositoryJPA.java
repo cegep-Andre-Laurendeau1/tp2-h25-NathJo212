@@ -39,10 +39,10 @@ public class DvdRepositoryJPA implements DocumentRepository<Dvd> {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             TypedQuery<Dvd> typedQuery = entityManager.createQuery(query, Dvd.class);
             if (titre != null && !titre.isEmpty()) {
-                typedQuery.setParameter("titre", "%" + titre + "%");
+                typedQuery.setParameter("titre", "%" + titre.toLowerCase()  + "%");
             }
             if (auteur != null && !auteur.isEmpty()) {
-                typedQuery.setParameter("realisateur", auteur);
+                typedQuery.setParameter("realisateur", auteur.toLowerCase());
             }
             if (annee != null) {
                 typedQuery.setParameter("annee", annee);

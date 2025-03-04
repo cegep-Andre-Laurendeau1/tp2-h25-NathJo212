@@ -37,10 +37,10 @@ public class CdRepositoryJPA implements DocumentRepository<Cd> {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             TypedQuery<Cd> typedQuery = entityManager.createQuery(query, Cd.class);
             if (titre != null && !titre.isEmpty()) {
-                typedQuery.setParameter("titre", "%" + titre + "%");
+                typedQuery.setParameter("titre", "%" + titre.toLowerCase() + "%");
             }
             if (auteur != null && !auteur.isEmpty()) {
-                typedQuery.setParameter("artiste", auteur);
+                typedQuery.setParameter("artiste", auteur.toLowerCase());
             }
             if (annee != null) {
                 typedQuery.setParameter("annee", annee);
