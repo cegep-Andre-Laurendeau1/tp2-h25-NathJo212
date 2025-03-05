@@ -7,5 +7,4 @@ import java.util.List;
 public interface EmprunteurRepository {
     void save(Emprunteur emprunteur);
     Emprunteur getByEmail(String email);
-    List<Emprunteur> getAll();
 }
