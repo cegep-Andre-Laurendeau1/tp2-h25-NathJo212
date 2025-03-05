@@ -17,16 +17,19 @@ public abstract class DocumentDTO {
     private int anneePublication;
     private int nombreExemplaires;
 
-    public static DocumentDTO toDto(Document document, int availableCount) {
+    public static DocumentDTO toDto(Document document) {
+        if (document == null) {
+            return null;
+        }
         if (document instanceof Livre) {
             Livre livre = (Livre) document;
-            return new LivreDTO(livre.getId(), livre.getTitre(), livre.getAnneePublication(), availableCount, livre.getAuteur(), livre.getEditeur(), livre.getNbPages());
+            return new LivreDTO(livre.getId(), livre.getTitre(), livre.getAnneePublication(), document.getNombreExemplaires(), livre.getAuteur(), livre.getEditeur(), livre.getNbPages());
         } else if (document instanceof Cd) {
             Cd cd = (Cd) document;
-            return new CdDTO(cd.getId(), cd.getTitre(), cd.getAnneePublication(), availableCount, cd.getArtiste(), cd.getNbMinutes());
+            return new CdDTO(cd.getId(), cd.getTitre(), cd.getAnneePublication(), document.getNombreExemplaires(), cd.getArtiste(), cd.getNbMinutes());
         } else if (document instanceof Dvd) {
             Dvd dvd = (Dvd) document;
-            return new DvdDTO(dvd.getId(), dvd.getTitre(), dvd.getAnneePublication(), availableCount, dvd.getRealisateur(), dvd.getNbMinutes());
+            return new DvdDTO(dvd.getId(), dvd.getTitre(), dvd.getAnneePublication(), document.getNombreExemplaires(), dvd.getRealisateur(), dvd.getNbMinutes());
         }
         return null;
     }
