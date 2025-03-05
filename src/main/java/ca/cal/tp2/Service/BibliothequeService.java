@@ -11,85 +11,36 @@ import java.util.List;
 
 public class BibliothequeService {
 
-    private final DocumentRepository livreRepository;
-    private final DocumentRepository cdRepository;
-    private final DocumentRepository dvdRepository;
+    private final DocumentRepository documentRepository;
     private final EmprunteurRepository emprunteurRepository;
 
-    public BibliothequeService(DocumentRepository livreRepository, DocumentRepository cdRepository, DocumentRepository dvdRepository, EmprunteurRepository emprunteurRepository) {
-        this.livreRepository = livreRepository;
-        this.cdRepository = cdRepository;
-        this.dvdRepository = dvdRepository;
+    public BibliothequeService(DocumentRepository documentRepository, EmprunteurRepository emprunteurRepository) {
+        this.documentRepository = documentRepository;
         this.emprunteurRepository = emprunteurRepository;
     }
 
-    public List<Document> getDocuments(String titre, String auteur, Integer annee) {
-        List<Document> resultats = new ArrayList<>();
-        resultats.addAll(livreRepository.rechercheDocuments(titre, auteur, annee));
-        resultats.addAll(cdRepository.rechercheDocuments(titre, auteur, annee));
-        resultats.addAll(dvdRepository.rechercheDocuments(titre, auteur, annee));
-        return resultats;
-    }
-
-    public List<DocumentDTO> rechercherDocuments(String titre, String auteur, Integer annee) {
-        List<Document> documents = getDocuments(titre, auteur, annee);
-        List<DocumentDTO> resultats = new ArrayList<>();
-        for (Document document : documents) {
-            int nombreExemplaireRestant;
-            if (document instanceof Livre) {
-                nombreExemplaireRestant = verifierQuantiteDocuments(document.getTitre(), ((Livre) document).getAuteur(), document.getAnneePublication());
-            } else if (document instanceof Cd){
-                nombreExemplaireRestant = verifierQuantiteDocuments(document.getTitre(), ((Cd) document).getArtiste(), document.getAnneePublication());
-            } else {
-                nombreExemplaireRestant = verifierQuantiteDocuments(document.getTitre(), ((Dvd) document).getRealisateur(), document.getAnneePublication());
-            }
-                resultats.add(DocumentDTO.toDto(document, nombreExemplaireRestant));
+    public Document getDocument(String titre, String auteur, Integer annee) {
+        Document document = null;
+        document = documentRepository.rechercheLivre(titre, auteur, annee);
+        if (document == null) {
+            document = documentRepository.rechercheCd(titre, auteur);
         }
-        return resultats;
+        if (document == null) {
+            document = documentRepository.rechercheDvd(titre, auteur);
+        }
+        return document;
     }
 
-    public Emprunteur getEmprunteurParEmail(String email) {
-        return emprunteurRepository.getByEmail(email);
+    public DocumentDTO rechercherDocument(String titre, String auteur, Integer annee) {
+        Document document = getDocument(titre, auteur, annee);
+        if (document == null) {
+            return null;
+        }
+        return DocumentDTO.toDto(document);
     }
+
 
     public EmprunteurDTO rechercherEmprunteurParEmail(String email) {
-        return EmprunteurDTO.toDto(getEmprunteurParEmail(email));
-    }
-
-    public List<Emprunteur> getTousEmprunteurs() {
-        return emprunteurRepository.getAll();
-    }
-
-    public int verifierQuantiteDocuments(String titre, String auteur, Integer annee) {
-        List<Emprunteur> emprunteurs = getTousEmprunteurs();
-        int borrowedCount = 0;
-
-        List<Document> documents = getDocuments(titre, auteur, annee);
-        if (documents.isEmpty()) {
-            throw new RuntimeException("Document non trouvé: " + titre);
-        }
-
-        for (Document document : documents) {
-            long documentId = document.getId();
-
-            for (Emprunteur emprunteur : emprunteurs) {
-                for (Emprunt emprunt : emprunteur.getEmprunts()) {
-                    for (EmpruntDetail empruntDetail : emprunt.getEmpruntDetails()) {
-                        if (empruntDetail.getDocument().getId() == documentId) {
-                            if (empruntDetail.getDateRetourActuelle() == null) {
-                                borrowedCount++;
-                            }
-                        }
-                    }
-                }
-            }
-
-            int availableCount = document.getNombreExemplaires() - borrowedCount;
-            if (availableCount < 0) {
-                throw new RuntimeException("Quantité incorrecte pour le document: " + document.getTitre());
-            }
-            return availableCount;
-        }
-        return 0;
+        return EmprunteurDTO.toDto(emprunteurRepository.getByEmail(email));
     }
 }
