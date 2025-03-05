@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -14,7 +16,7 @@ import java.util.List;
 @Getter
 public class Emprunt {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDate emprunt;
 
@@ -23,7 +25,7 @@ public class Emprunt {
     private Emprunteur emprunteur;
 
     @OneToMany(mappedBy = "emprunt", cascade = CascadeType.PERSIST)
-    private List<EmpruntDetail> empruntDetails = new ArrayList<>();
+    private Set<EmpruntDetail> empruntDetails = new HashSet<>();
 
     public Emprunt(long id, LocalDate emprunt, Emprunteur emprunteur) {
         this.id = id;

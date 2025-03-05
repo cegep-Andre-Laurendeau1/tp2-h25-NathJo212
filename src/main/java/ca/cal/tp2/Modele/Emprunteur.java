@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -15,10 +17,10 @@ import java.util.List;
 @DiscriminatorValue("E")
 public class Emprunteur extends Utilisateur {
     @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.PERSIST)
-    private List<Emprunt> emprunts = new ArrayList<>();
+    private Set<Emprunt> emprunts = new HashSet<>();
 
     @OneToMany(mappedBy = "emprunteur", cascade = CascadeType.PERSIST)
-    private List<Amendes> amendes = new ArrayList<>();
+    private Set<Amendes> amendes = new HashSet<>();
 
     public Emprunteur(long id, String prenom, String nom, String email) {
         super(id, prenom, nom, email);
