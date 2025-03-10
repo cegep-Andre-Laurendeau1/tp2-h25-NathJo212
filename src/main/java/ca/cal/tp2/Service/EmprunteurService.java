@@ -1,5 +1,6 @@
 package ca.cal.tp2.Service;
 
+import ca.cal.tp2.Exceptions.*;
 import ca.cal.tp2.Modele.*;
 import ca.cal.tp2.Persistance.DocumentRepository;
 import ca.cal.tp2.Persistance.EmpruntRepository;
@@ -19,12 +20,12 @@ public class EmprunteurService {
         this.emprunteurRepository = emprunteurRepository;
     }
 
-    public void emprunterDocuments(String emprunteurEmail, List<String> documentTitres, int annee, int mois, int jour) {
+    public void emprunterDocuments(String emprunteurEmail, List<String> documentTitres, int annee, int mois, int jour) throws DatabaseErrorExceptionHandler, EmprunteurNotFoundException, DocumentNotFoundException, PasDeCopiesException {
         Emprunteur emprunteur = emprunteurRepository.getByEmail(emprunteurEmail);
         LocalDate dateEmprunt = LocalDate.of(annee, mois, jour);
 
         if (emprunteur == null) {
-            throw new RuntimeException("Emprunteur non trouvé");
+            throw new EmprunteurNotFoundException("Emprunteur not found");
         }
 
         for (Amendes amende : emprunteur.getAmendes()) {
@@ -38,11 +39,11 @@ public class EmprunteurService {
             Document document = bibliothequeService.getDocument(documentTitre, null, null);
 
             if (document == null) {
-                throw new RuntimeException("Document non trouvé");
+                throw new DocumentNotFoundException("Document not found");
             }
 
             if (empruntRepository.documentEmprunterCount(document.getId()) >= document.getNombreExemplaires()) {
-                throw new RuntimeException("Plus d'exemplaire empruntable pour le document, titre: " + document.getTitre());
+                throw new PasDeCopiesException("Plus d'exemplaire empruntable pour le document, titre: " + document.getTitre());
             }
 
             LocalDate dateRetourPrevue = calculerDateRetour(document, dateEmprunt);
