@@ -26,20 +26,25 @@ public class BibliothequeService {
             document = documentRepository.rechercheDvd(titre, auteur);
         }
         if (document == null) {
-            throw new DocumentNotFoundException("Document not found");
+            throw new DocumentNotFoundException("Document pas trouvé " + titre + " " + auteur + " " + annee);
         }
         return document;
     }
 
     public DocumentDTO rechercherDocument(String titre, String auteur, Integer annee) throws DatabaseErrorExceptionHandler, DocumentNotFoundException {
-        Document document = getDocument(titre, auteur, annee);
-        return DocumentDTO.toDto(document);
+        try {
+            Document document = getDocument(titre, auteur, annee);
+            return DocumentDTO.toDto(document);
+        } catch (DocumentNotFoundException e) {
+            System.out.println("Document pas trouvé: " + e.getMessage());
+            return null;
+        }
     }
 
     public EmprunteurDTO rechercherEmprunteurParEmail(String email) throws DatabaseErrorExceptionHandler, EmprunteurNotFoundException {
         Emprunteur emprunteur = emprunteurRepository.getByEmail(email);
         if (emprunteur == null) {
-            throw new EmprunteurNotFoundException("Emprunteur not found");
+            throw new EmprunteurNotFoundException("Emprunteur pas trouvé");
         }
         return EmprunteurDTO.toDto(emprunteur);
     }
