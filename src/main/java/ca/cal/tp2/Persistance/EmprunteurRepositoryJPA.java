@@ -1,5 +1,6 @@
 package ca.cal.tp2.Persistance;
 
+import ca.cal.tp2.Exceptions.DatabaseErrorExceptionHandler;
 import ca.cal.tp2.Modele.Emprunt;
 import ca.cal.tp2.Modele.Emprunteur;
 import jakarta.persistence.*;
@@ -10,18 +11,18 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("nathan.pu");
 
     @Override
-    public void save(Emprunteur emprunteur) {
+    public void save(Emprunteur emprunteur) throws DatabaseErrorExceptionHandler {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             entityManager.persist(emprunteur);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
     }
 
     @Override
-    public Emprunteur getByEmail(String email) {
+    public Emprunteur getByEmail(String email) throws DatabaseErrorExceptionHandler {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             var sql = """
@@ -39,7 +40,7 @@ public class EmprunteurRepositoryJPA implements EmprunteurRepository {
         } catch (NoResultException e) {
             return null;
         } catch (RuntimeException e) {
-            throw new RuntimeException("Erreur lors de la récupération de l'Emprunteur par email: " + e.getMessage(), e);
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
     }
 }

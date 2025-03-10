@@ -1,27 +1,30 @@
 package ca.cal.tp2.Persistance;
 
+import ca.cal.tp2.Exceptions.DatabaseErrorExceptionHandler;
 import ca.cal.tp2.Modele.Cd;
 import ca.cal.tp2.Modele.Document;
 import ca.cal.tp2.Modele.Dvd;
 import ca.cal.tp2.Modele.Livre;
 import jakarta.persistence.*;
 
+import java.util.zip.DataFormatException;
+
 public class DocumentRepositoryJPA implements DocumentRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("nathan.pu");
 
     @Override
-    public void save(Document document) {
+    public void save(Document document) throws DatabaseErrorExceptionHandler {
         try(EntityManager entityManager = entityManagerFactory.createEntityManager();) {
             entityManager.getTransaction().begin();
             entityManager.persist(document);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
-            throw new RuntimeException("Erreur lors de l'enregistrement du Cd : " + e.getMessage(), e);
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
     }
 
     @Override
-    public Livre rechercheLivre(String titre, String auteur, Integer annee) {
+    public Livre rechercheLivre(String titre, String auteur, Integer annee) throws DatabaseErrorExceptionHandler {
         String sql = "SELECT l FROM Livre l WHERE 1=1";
         if (titre != null && !titre.isEmpty()) {
             sql += " AND l.titre LIKE :titre";
@@ -49,11 +52,13 @@ public class DocumentRepositoryJPA implements DocumentRepository {
             return typedQuery.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        } catch (RuntimeException e) {
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
     }
 
     @Override
-    public Cd rechercheCd(String titre, String artiste) {
+    public Cd rechercheCd(String titre, String artiste) throws DatabaseErrorExceptionHandler {
         String query = "SELECT c FROM Cd c WHERE 1=1";
         if (titre != null && !titre.isEmpty()) {
             query += " AND c.titre LIKE :titre";
@@ -75,11 +80,13 @@ public class DocumentRepositoryJPA implements DocumentRepository {
             return typedQuery.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        } catch (RuntimeException e) {
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
     }
 
     @Override
-    public Dvd rechercheDvd(String titre, String realisateur) {
+    public Dvd rechercheDvd(String titre, String realisateur) throws DatabaseErrorExceptionHandler {
         String query = "SELECT d FROM Dvd d WHERE 1=1";
         if (titre != null && !titre.isEmpty()) {
             query += " AND d.titre LIKE :titre";
@@ -101,6 +108,8 @@ public class DocumentRepositoryJPA implements DocumentRepository {
             return typedQuery.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        } catch (RuntimeException e) {
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
     }
 }

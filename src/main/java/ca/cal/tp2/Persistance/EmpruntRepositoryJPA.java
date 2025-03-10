@@ -1,5 +1,6 @@
 package ca.cal.tp2.Persistance;
 
+import ca.cal.tp2.Exceptions.DatabaseErrorExceptionHandler;
 import ca.cal.tp2.Modele.Emprunt;
 import jakarta.persistence.*;
 
@@ -7,18 +8,18 @@ public class EmpruntRepositoryJPA implements EmpruntRepository {
     private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("nathan.pu");
 
     @Override
-    public void save(Emprunt emprunt) {
+    public void save(Emprunt emprunt) throws DatabaseErrorExceptionHandler {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             entityManager.persist(emprunt);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
-            throw new RuntimeException("Erreur lors de l'enregistrement de l'Emprunt : " + e.getMessage(), e);
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
     }
 
     @Override
-    public int documentEmprunterCount(Long id) {
+    public int documentEmprunterCount(Long id) throws DatabaseErrorExceptionHandler {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             String query = "SELECT COUNT(ed) FROM EmpruntDetail ed WHERE ed.document.id = :documentId AND ed.dateRetourActuelle IS NULL";
@@ -27,7 +28,7 @@ public class EmpruntRepositoryJPA implements EmpruntRepository {
             entityManager.getTransaction().commit();
             return typedQuery.getSingleResult().intValue();
         } catch (RuntimeException e) {
-            throw new RuntimeException("Erreur lors du comptage des emprunts pour le document : " + e.getMessage(), e);
+            throw new DatabaseErrorExceptionHandler(e.getMessage());
         }
 
     }
